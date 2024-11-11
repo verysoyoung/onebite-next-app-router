@@ -4,10 +4,11 @@ import style from './page.module.css'
 export default async function Page({
   params,
 }: {
-  params: { id: string | string[] }
+  params: Promise<{ id: string | string[] }>
 }) {
+  const { id } = await params
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${params.id}`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
   )
   const book: BookData = await response.json()
 
@@ -15,8 +16,7 @@ export default async function Page({
     return <div>오류가 있습니다..</div>
   }
 
-  const { id, title, subTitle, description, author, publisher, coverImgUrl } =
-    book
+  const { title, subTitle, description, author, publisher, coverImgUrl } = book
 
   return (
     <div className={style.container}>
