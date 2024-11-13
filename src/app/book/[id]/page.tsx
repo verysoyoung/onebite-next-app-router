@@ -3,7 +3,7 @@ import style from './page.module.css'
 import { notFound } from 'next/navigation'
 
 //generateStaticParams 내에 있는 params외에는 404페이지를 리턴
-export const dynamicParams = false
+// export const dynamicParams = false
 
 //build 타임에 만듦 page router 에서 getStaticPath 와 같은 역할
 export function generateStaticParams() {
