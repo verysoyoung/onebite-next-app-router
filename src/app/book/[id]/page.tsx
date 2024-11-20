@@ -1,6 +1,8 @@
-import { BookData } from '@/types'
+import { BookData, ReviewData } from '@/types'
 import style from './page.module.css'
 import { notFound } from 'next/navigation'
+import { createReviewAction } from '@/actions/create-review.action'
+import ReviewItem from '@/components/review-item'
 
 //generateStaticParams 내에 있는 params외에는 404페이지를 리턴
 // export const dynamicParams = false
@@ -43,29 +45,50 @@ async function BookDetail({ bookId }: { bookId: string }) {
   )
 }
 
-function ReviewEditor() {
-  async function createReviewAction(formData: FormData) {
-    'use server'
-    const content = formData.get('content')?.toString()
-    const author = formData.get('author')?.toString()
-    console.log(content, author)
-  }
+function ReviewEditor({ bookId }: { bookId: string }) {
   return (
     <section>
       <form action={createReviewAction}>
-        <input name="content" placeholder="리뷰 내용" />
-        <input name="author" placeholder="작성자" />
+        <input name="bookId" value={bookId} hidden readOnly />
+        <input required name="content" placeholder="리뷰 내용" />
+        <input required name="author" placeholder="작성자" />
         <button type="submit">작성하기</button>
       </form>
     </section>
   )
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+async function ReviewList({ bookId }: { bookId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`
+  )
+  if (!response.ok) {
+    throw new Error(`Review fetch failed: ${response.statusText}`)
+  }
+
+  const reviews: ReviewData[] = await response.json()
+
+  return (
+    <section>
+      {reviews.map(review => (
+        <ReviewItem key={review.id} {...review} />
+      ))}
+    </section>
+  )
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+
   return (
     <div className={style.container}>
-      <BookDetail bookId={params.id} />
-      <ReviewEditor />
+      <BookDetail bookId={id} />
+      <ReviewEditor bookId={id} />
+      <ReviewList bookId={id} />
     </div>
   )
 }
