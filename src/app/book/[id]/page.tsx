@@ -1,8 +1,8 @@
 import { BookData, ReviewData } from '@/types'
 import style from './page.module.css'
 import { notFound } from 'next/navigation'
-import { createReviewAction } from '@/actions/create-review.action'
 import ReviewItem from '@/components/review-item'
+import ReviewEditor from '@/components/review-editor'
 
 //generateStaticParams 내에 있는 params외에는 404페이지를 리턴
 // export const dynamicParams = false
@@ -41,19 +41,6 @@ async function BookDetail({ bookId }: { bookId: string }) {
         {author} | {publisher}
       </div>
       <div className={style.description}>{description}</div>
-    </section>
-  )
-}
-
-function ReviewEditor({ bookId }: { bookId: string }) {
-  return (
-    <section>
-      <form action={createReviewAction}>
-        <input name="bookId" value={bookId} hidden readOnly />
-        <input required name="content" placeholder="리뷰 내용" />
-        <input required name="author" placeholder="작성자" />
-        <button type="submit">작성하기</button>
-      </form>
     </section>
   )
 }
