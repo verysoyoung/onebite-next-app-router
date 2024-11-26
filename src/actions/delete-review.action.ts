@@ -1,3 +1,5 @@
+import { revalidateTag } from 'next/cache'
+
 export async function deleteReviewAction(_: any, formData: FormData) {
   const reviewId = formData.get('reviewId')?.toString()
   const bookId = formData.get('bookId')?.toString()
@@ -11,7 +13,7 @@ export async function deleteReviewAction(_: any, formData: FormData) {
         method: 'DELETE',
       }
     )
-    // revalidateTag(`review-${bookId}`)
+    revalidateTag(`review-${bookId}`)
     if (!response.ok) {
       throw new Error(response.statusText)
     }
