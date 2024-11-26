@@ -3,7 +3,6 @@ import style from './page.module.css'
 import { BookData } from '@/types'
 import { delay } from '@/util/delay'
 import { Suspense } from 'react'
-import BookItemSkeleton from '@/components/skeleton/book-item-skeleton'
 import BookListSkeleton from '@/components/skeleton/book-list-skeleton'
 
 // export const dynamic = 'force-dynamic' //app router 에서는 컴포넌트에서 세밀하게 dynamic, static 을 설정해주기 때문에 해당 옵션 사용 자제
